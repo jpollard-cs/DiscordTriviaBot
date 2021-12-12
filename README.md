@@ -1,4 +1,4 @@
-# TypeScript Discord Starter Bot
+# Discord Trivia Bot
 
 Add the following environment variables to your repl or .env file
 
