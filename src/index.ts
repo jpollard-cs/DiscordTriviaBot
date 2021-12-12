@@ -1,4 +1,5 @@
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 import { Client, Intents } from 'discord.js';
 import WOKCommands from 'wokcommands';
@@ -21,12 +22,33 @@ client.on('ready', () => {
     // The name of the local folder for your command files
     commandDir: path.join(__dirname, 'commands'),
     // The name of the local folder for your feature files
-    featureDir: path.join(__dirname, 'features'),
+    // featureDir: path.join(__dirname, 'features'),
     // Allow importing of .ts files if you are using ts-node
     typeScript: false,
     testServers: (process.env.TEST_GUILD_IDS || '').split(','),
     mongoUri,
-  }).setDefaultPrefix('*');
+  })
+    .setDefaultPrefix('*')
+    .setCategorySettings([
+      {
+        name: 'Fun & Games',
+        emoji: '🎮',
+      },
+      {
+        name: 'Fun & Games Admin',
+        emoji: '🕹️',
+        hidden: true,
+      },
+      {
+        // You can change the default emojis as well
+        // "Configuration" is ⚙ by default
+        name: 'Configuration',
+        emoji: '🚧',
+        // You can also hide a category from the help menu
+        // Admins bypass this
+        hidden: true,
+      },
+    ]);
 });
 
 // hack to keep repl.it process alive

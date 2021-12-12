@@ -12,9 +12,8 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "preLaunchTask": "nvm",
+      "preLaunchTask": "build",
       "program": "${workspaceFolder}/src/index.ts",
-      "runtimeArgs": ["-r", "ts-node/register", "-r", "tsconfig-paths/register"],
       "console": "integratedTerminal",
       "outFiles": [
         "${workspaceFolder}/**/*.js"

@@ -3,11 +3,11 @@
 	"tasks": [
 		{
 			"type": "npm",
-			"script": "nvm",
+			"script": "build",
 			"group": "build",
 			"problemMatcher": [],
-			"label": "nvm",
-			"detail": "run nvm"
+			"label": "build",
+			"detail": "build"
 		}
 	]
 }
