@@ -1,5 +1,5 @@
 import { ICallbackObject, ICommand } from 'wokcommands';
-import { ButtonInteraction, Interaction, Message, MessageActionRow, MessageButton, MessageEmbed, MessageSelectMenu, TextChannel } from 'discord.js';
+import {  Interaction, Message, MessageActionRow, MessageEmbed, MessageSelectMenu, SelectMenuInteraction, TextChannel } from 'discord.js';
 import { AppColors } from '../configuration/colors';
 import { setTimeout } from 'timers/promises';
 import questionsList from '../data/trivia/questions';
@@ -115,15 +115,17 @@ export = {
         const questionSelectionEmbed = new MessageEmbed()
           .setColor(AppColors.SUCCESS_GREEN)
           .setTitle(question.text);
-        const answerButtons = [ ...take(3, shuffle(question.fakeAnswers)), question.correctAnswer].map(a => {
-          return new MessageButton()
-            .setCustomId(`${questionSelectionId}:${a.id}`)
-            .setLabel(a.value)
-            .setStyle('PRIMARY');
+
+        const answerSelectMenuOptionValues = [ ...take(3, shuffle(question.fakeAnswers)), question.correctAnswer].map(a => {
+          return { label: a.value, value: a.id };
         });
+        const answerSelectMenu = new MessageSelectMenu()
+          .setCustomId(questionSelectionId)
+          .setPlaceholder('Nothing selected')
+          .addOptions(answerSelectMenuOptionValues);
         const questionSelectionComponent = new MessageActionRow()
           .addComponents(
-            ...shuffle(answerButtons),
+            answerSelectMenu,
           );
 
         const questionMessage = await channel.send({
@@ -132,9 +134,9 @@ export = {
         });
 
         const questionSelectionFilter = (i: Interaction) => {
-          if (!i.isButton()) { return; }
+          if (!i.isSelectMenu()) { return; }
           i.deferUpdate();
-          return i.customId.split(':')[0] === questionSelectionId;
+          return i.customId === questionSelectionId;
         };
 
         const answerCollector = await channel.createMessageComponentCollector({
@@ -147,7 +149,7 @@ export = {
             try {
               const collectedAnswers = {};
               answerCollector.on('collect', i => {
-                collectedAnswers[i.user.id] = (i as ButtonInteraction).customId.split(':')[1] === question.correctAnswer.id;
+                collectedAnswers[i.user.tag] = (i as SelectMenuInteraction).values[0] === question.correctAnswer.id;
               });
 
               answerCollector.on('end', async () => {
@@ -233,7 +235,7 @@ export = {
         content: instance.messageHandler.get(guild, 'EXCEPTION'),
         ephemeral: true,
       // eslint-disable-next-line no-empty-function
-      }).catch(() => { });
+      }).catch(() => {});
     }
   },
 } as ICommand;
