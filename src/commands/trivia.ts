@@ -1,5 +1,5 @@
 import { ICallbackObject, ICommand } from 'wokcommands';
-import {  Interaction, Message, MessageActionRow, MessageEmbed, MessageSelectMenu, SelectMenuInteraction, TextChannel } from 'discord.js';
+import { Interaction, Message, MessageActionRow, MessageEmbed, MessageSelectMenu, SelectMenuInteraction, TextChannel } from 'discord.js';
 import { AppColors } from '../configuration/colors';
 import { setTimeout } from 'timers/promises';
 import questionsList from '../data/trivia/questions';
@@ -208,18 +208,61 @@ export = {
         },
         options: {
           responsive: true,
+          scales: {
+            xAxes: {
+              ticks: {
+                precision: 0,
+                color: 'white',
+                textStrokeWidth: 5,
+                font: {
+                  size: 14,
+                  weight: 'bold',
+                },
+              },
+              grid: {
+                borderColor: 'white',
+              },
+            },
+            yAxes: {
+              ticks: {
+                precision: 0,
+                color: 'white',
+                textStrokeWidth: 5,
+                font: {
+                  size: 14,
+                  weight: 'bold',
+                },
+              },
+              grid: {
+                borderColor: 'white',
+              },
+            },
+          },
           plugins: {
             legend: {
               position: 'top',
+              color: 'white',
+              labels: {
+                color: 'white',
+                font: {
+                  size: 14,
+                  weight: 'bold',
+                },
+              },
             },
             title: {
               display: true,
-              text: 'Chart.js Line Chart',
+              text: 'Trivia Results',
+              color: 'white',
+              font: {
+                size: 16,
+                weight: 'bold',
+              },
             },
           },
         },
       };
-      const chartJSNodeCanvas = new ChartJSNodeCanvas({ width: 800, height: 600 });
+      const chartJSNodeCanvas = new ChartJSNodeCanvas({ width: 800, height: 600, backgroundColour: 'black' });
       const image = await chartJSNodeCanvas.renderToBuffer(chartConfig as any);
       await channel.send({
         content: 'Here are the results!',
